@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Bewerk Film{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Bewerk Film: {{ film.title }}</h2>
+
+  <form action="{{ url_for('edit') }}" method="post">  
+    <input type="hidden" name="id" value="{{ film.id }}">
+    <div class="mb-3">
+      <label for="title" class="form-label">Titel</label>
+      <input type="text" class="form-control" id="title" name="title" value="{{ film.title }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select class="form-control" id="status" name="status">
+        <option value="Beschikbaar" {% if film.status == 'Beschikbaar' %}selected{% endif %}>Beschikbaar</option>
+        <option value="Gereserveerd" {% if film.status == 'Gereserveerd' %}selected{% endif %}>Gereserveerd</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary w-100">Film Bijwerken</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

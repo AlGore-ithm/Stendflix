@@ -1,0 +1,265 @@
+openapi: 3.0.0
+info:
+  title: Flask Stendflix API
+  description: API voor Stendflix
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: DIP2 API
+
+paths:
+  /api/videotheek:
+    get:
+      summary: Get all movies
+      description: Retrieve a list of all movies in the library.
+      responses:
+        '200':
+          description: A list of movies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Movie'  # Verwijs naar Movie schema
+
+  /add:
+    post:
+      summary: Add a movie
+      description: Add a movie to the videotheek.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMovie'  # Gebruik een specifiek schema voor AddMovie
+      responses:
+        '201':  # Gebruik 201 Created voor succesvolle toevoegi
+          description: Movie added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'  # Verwijs naar Movie schema
+        '400':
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+
+  /edit:
+    put:
+      summary: Edit a movie
+      description: Edits a movie from the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditMovie'  
+      responses:
+        '200':
+          description: Movie edited successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '400':
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+
+  /delete:
+    delete:
+      summary: Deletes a movie
+      description: Deletes a movie from the videotheek.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DelMovie'
+      responses:
+        '200':
+          description: Movie deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'  
+        '400':
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+
+  /reserve:
+    post: 
+      summary: Reserves a movie
+      description: Reserves a movie from the library.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+              required:
+                - id
+      responses:
+        '200':
+          description: Movie reserved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie' 
+        '400':
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+
+  /return:
+    post: 
+      summary: Returns a movie
+      description: Returns a movie from the library.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+              required:
+                - id
+      responses:
+        '200':
+          description: Movie returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '400':
+          description: Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+
+components:
+  schemas:
+    Movie:  
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Terrifier 3"
+        status:  
+          type: string
+          example: "Beschikbaar"
+        description:
+          type: string
+          example: "A horror film."
+        image:
+          type: string
+          example: "https://example.com/image.jpg"
+      required:
+        - id
+        - title
+        - status
+        - description
+        - image
+
+    AddMovie:  
+      type: object
+      properties:
+        title:
+          type: string
+          example: "IT"
+        status:
+          type: string
+          example: "Beschikbaar"
+      required:
+        - title
+        - status
+
+    EditMovie:  
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Terrifier 3"
+        status:
+          type: string
+          example: "Gereserveerd"
+      required:
+        - id
+        - title
+        - status
+
+    DelMovie:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+      required:
+        - id
+
+    Error400:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Something is missing"
+
+    Error500:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Internal server error"

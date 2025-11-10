@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to Stendflix!</h1>
+    <h2 class="lead">Hallo, {{ user.username }}!</h2>
+    <h3 class="lead">Je bent ingelogd als {{ user.role }}.</h3>
+    <h4 class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem porro odit voluptatum accusantium est excepturi accusamus at nemo cum praesentium dolore sed saepe, ipsa ducimus commodi facilis modi nesciunt quaerat!</h4>
+</div>
+<div class="justify-content-center">
+    <a href="{{ url_for('uitloggen') }}" class="btn btn-primary col-md-auto">Uitloggen</a>
+</div>
+{% endblock %}
