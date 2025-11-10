@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Onze Films{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">De Films</h2>
+  <div class="mb-4 text-center">
+    <h5>
+      <span class="badge badge-info">Beschikbare Films: {{ film|selectattr('status', 'equalto','Beschikbaar')|list|length }}</span>
+    </h5>
+  </div>
+  {% if film %}
+  <div class="row">
+    {% for film in film %}
+    <div class="col-md-3 mb-4"> <div class="card"> 
+        <img src="{{ film.image or 'https://via.placeholder.com/150' }}"class="card-img-top" alt="Film Poster">
+        <div class="card-body"> 
+          <h5 class="card-title">{{ film.title }}</h5>
+          <p class="card-text">
+            <span class="badge {{ 'badge-success' if film.status == 'Beschikbaar' else 'badge-warning' }}">Status: {{ film.status }}</span>
+          </p>
+          <p class="card-text">{{ film.description or'Geen beschrijving beschikbaar' }}</p>
+          {% if film.status == 'Beschikbaar' %}
+          <form action="{{ url_for('reserve') }}"method="post">
+            <input type="hidden" name="id" value="{{ film.id }}">
+            <button type="submit" class="btn btn-primary w-100">Reserveren</button>
+          </form>
+          {% elif film.status == 'Gereserveerd' %}
+          <form action="{{ url_for('return_film') }}"method="post">
+            <input type="hidden" name="id" value="{{ film.id }}">
+            <button type="submit"class="btn btn-success w-100">Inleveren</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-center">Er zijn geen films meer</p>
+  {% endif %}
+</div>
+{% endblock %}

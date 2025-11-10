@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Voeg een Film toe{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Voeg een nieuwe Film toe</h2>
+
+  <form action="{{ url_for('add') }}" method="post">
+    <div class="mb-3">
+      <label for="title" class="form-label">Titel</label>
+      <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select class="form-control" id="status" name="status">
+        <option value="Beschikbaar">Beschikbaar</option>
+        <option value="Gereserveerd">Gereserveerd</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-primary w-100">Film Toevoegen</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

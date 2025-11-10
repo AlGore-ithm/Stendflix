@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Paneel{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Admin Paneel</h1>
+    <div class="mb-4 text-center">
+        <a href="{{ url_for('add') }}" class="btn btn-warning">Voeg een nieuwe film toe</a>
+      </div>
+</div>
+{% if film %}
+<div class="row">
+  {% for film in film %}
+  <div class="col-md-3 mb-4"> <div class="card"> 
+      <img src="{{ film.image or 'https://via.placeholder.com/150' }}"class="card-img-top" alt="Film Poster">
+      <div class="card-body"> 
+        <h5 class="card-title">{{ film.title }}</h5>
+        <p class="card-text">
+          <span class="badge {{ 'badge-success' if film.status == 'Beschikbaar' else 'badge-warning' }}">Status: {{ film.status }}</span>
+        </p>
+        <p class="card-text">{{ film.description or'Geen beschrijving beschikbaar' }}</p>
+        <div class="mt-2">
+          <form action="{{ url_for('delete') }}"method="post"onsubmit="return confirm('Weet je zeker dat je deze film wil verwijderen?');">
+            <input type="hidden" name="id" value="{{ film.id }}">
+            <button type="submit"class="btn btn-danger w-100">Verwijder</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="text-center">Er zijn geen films meer</p>
+{% endif %}
+{% endblock %}
